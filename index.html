@@ -5,12 +5,20 @@
 <title>Anna & Mark | Wedding</title>
 
 <style>
+/* ======================
+   Base
+====================== */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
   background: #fff8f2;
   color: #3a2f2f;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* ======================
@@ -41,19 +49,19 @@ header {
 
 .logo {
   font-family: "Georgia", serif;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
 nav a {
-  margin-left: 20px;
+  margin-left: 22px;
   text-decoration: none;
   color: #3a2f2f;
   font-size: 14px;
 }
 
 /* ======================
-   Hero
+   HERO with Motion
 ====================== */
 .hero {
   min-height: 100vh;
@@ -62,25 +70,68 @@ nav a {
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 
   background:
-    linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),
+    linear-gradient(-45deg,
+      rgba(0,0,0,0.35),
+      rgba(0,0,0,0.2),
+      rgba(0,0,0,0.35)
+    ),
     url("https://images.pexels.com/photos/265856/pexels-photo-265856.jpeg");
 
-  background-size: cover;
+  background-size: 400% 400%, cover;
   background-position: center;
+  animation: gradientMove 20s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%, center; }
+  50% { background-position: 100% 50%, center; }
+  100% { background-position: 0% 50%, center; }
+}
+
+/* Floating particles */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.35) 2px, transparent 3px);
+  background-size: 120px 120px;
+  animation: floatParticles 60s linear infinite;
+  opacity: 0.4;
+}
+
+.hero::after {
+  animation-duration: 90s;
+  opacity: 0.25;
+}
+
+@keyframes floatParticles {
+  from { background-position: 0 0; }
+  to { background-position: 1000px 1000px; }
+}
+
+/* Hero text */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 1.6s ease forwards;
 }
 
 .hero h1 {
   font-family: "Georgia", serif;
-  font-size: 3.5rem;
+  font-size: 3.8rem;
   color: white;
+  margin-bottom: 10px;
 }
 
 .hero p {
   color: #fff;
-  font-size: 1.2rem;
-  margin-top: 10px;
+  font-size: 1.3rem;
 }
 
 /* ======================
@@ -98,8 +149,22 @@ section {
 .section-title {
   text-align: center;
   font-family: "Georgia", serif;
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   margin-bottom: 40px;
+}
+
+/* Fade animation */
+.fade {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1.2s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Our Story */
@@ -111,15 +176,20 @@ section {
 .details {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 24px;
+  gap: 28px;
 }
 
 .card {
   background: white;
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 32px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
   text-align: center;
+  transition: transform 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
 }
 
 /* RSVP */
@@ -128,12 +198,12 @@ section {
   margin: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 input, select, button {
   padding: 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
 }
@@ -144,10 +214,11 @@ button {
   border: none;
   cursor: pointer;
   font-weight: bold;
+  transition: transform 0.3s ease;
 }
 
 button:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 /* Footer */
@@ -156,6 +227,17 @@ footer {
   padding: 40px;
   background: #f3e8df;
   font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  nav {
+    display: none;
+  }
+
+  .hero h1 {
+    font-size: 2.6rem;
+  }
 }
 </style>
 </head>
@@ -175,7 +257,7 @@ footer {
 
 <!-- Hero -->
 <section class="hero">
-  <div>
+  <div class="hero-content">
     <h1>Anna & Mark</h1>
     <p>June 15, 2026 • Manila, Philippines</p>
   </div>
@@ -183,7 +265,7 @@ footer {
 
 <!-- Our Story -->
 <section id="story">
-  <div class="section-inner story">
+  <div class="section-inner story fade">
     <h2 class="section-title">Our Story</h2>
     <p>
       We met in the most unexpected way and fell in love over coffee,
@@ -195,7 +277,7 @@ footer {
 
 <!-- Details -->
 <section id="details">
-  <div class="section-inner">
+  <div class="section-inner fade">
     <h2 class="section-title">Wedding Details</h2>
 
     <div class="details">
@@ -222,7 +304,7 @@ footer {
 
 <!-- RSVP -->
 <section id="rsvp" class="rsvp">
-  <div class="section-inner">
+  <div class="section-inner fade">
     <h2 class="section-title">RSVP</h2>
 
     <form>
